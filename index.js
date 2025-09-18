@@ -1,20 +1,36 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const { Pool } = require('pg')
+
+const { pool } = require('./db')
+const { adminRoute } = require('./routes/admin')
+const { userRoute } = require('./routes/user')
 
 const JWT_TOKEN = "s3cr37";
 
 const app = express()
 app.use(express.json())
 
+app.use("/user",userRoute);
+app.use("/admin",adminRoute);
 
-const pool = new Pool({
-  user: 'myuser',       
-  host: 'localhost',
-  database: 'mydb',     
-  password: 'mypassword', 
-  port: 5432,
-});
+
+
+
+app.post('/register',async (req,res) => {
+	const { username, password } = req.body;
+
+	try {
+		const userResult = await pool.query(
+			'INSERT INTO users(username,password) VALUES ($1,$2)',
+			[username,password]
+		);
+		res.status(201).send('User registered successfully');
+	}
+	catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+  }
+})
 
 
 app.post('/login',async (req, res) => {
@@ -38,6 +54,11 @@ app.post('/login',async (req, res) => {
 
 			res.send(token)
 		}
+		if (userResult.rows.length === 0){
+			res.json({
+				message: "invalid credentials"
+			})
+		}
 
 
 	}
@@ -47,21 +68,7 @@ app.post('/login',async (req, res) => {
   }
 });
 
-app.post('/register',async (req,res) => {
-	const { username, password } = req.body;
 
-	try {
-		const userResult = await pool.query(
-			'INSERT INTO users(username,password) VALUES ($1,$2)',
-			[username,password]
-		);
-		res.status(201).send('User registered successfully');
-	}
-	catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-  }
-})
 
 app.listen(3000, () => {
   console.log('Server running at http://localhost:3000');
