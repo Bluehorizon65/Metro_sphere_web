@@ -14,62 +14,6 @@ app.use("/user",userRoute);
 app.use("/admin",adminRoute);
 
 
-
-
-app.post('/register',async (req,res) => {
-	const { username, password } = req.body;
-
-	try {
-		const userResult = await pool.query(
-			'INSERT INTO users(username,password) VALUES ($1,$2)',
-			[username,password]
-		);
-		res.status(201).send('User registered successfully');
-	}
-	catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-  }
-})
-
-
-app.post('/login',async (req, res) => {
-	const { username, password } = req.body;
-
-	try {
-		const userResult = await pool.query(
-			'SELECT * FROM users WHERE username=$1 AND password=$2',
-			[username, password]
-		);
-		
-		if (userResult.rows.length > 0){
-			const user = userResult.rows[0];
-
-			const token = jwt.sign(
-				{id: user.id.toString()},
-				JWT_TOKEN
-			);
-
-			res.json({token});
-
-			res.send(token)
-		}
-		if (userResult.rows.length === 0){
-			res.json({
-				message: "invalid credentials"
-			})
-		}
-
-
-	}
-	catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-  }
-});
-
-
-
 app.listen(3000, () => {
   console.log('Server running at http://localhost:3000');
 });
