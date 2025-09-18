@@ -16,7 +16,10 @@ A FastAPI-based REST API server for analyzing PDF documents and text using a fin
 
 ## Quick Start
 
+### download the adapter file
+`download form this hugginface repo thinkingnew/metro_adapter`
 
+link - https://huggingface.co/thinkingnew/metro_adapter
 
 ## how to integrate this with the web application (`Important`)
 
