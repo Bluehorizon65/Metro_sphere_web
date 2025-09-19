@@ -1,7 +1,11 @@
 const { Router } = require('express');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { pool } = require("../db");
+
 const JWT_TOKEN = "s3cr37";
+const saltRounds = 10;
+
 const adminRoute = Router();
 
 
@@ -9,12 +13,20 @@ adminRoute.post('/signin',async (req,res) => {
 	const { username, password } = req.body;
 
 	try{
-		const result = await pool.query(
-			'SELECT * FROM users WHERE username=$1 AND password=$2',
-			[username, password]
-		);
 		
-		if (result.rows.length > 0){
+		const result = await pool.query(
+			'SELECT id,password FROM users WHERE username=$1 ',
+			[username]
+		);
+
+		const user = result.rows[0];
+		const hashed = user.password;
+
+		const pass_comp = await bcrypt.compare(password,hashed);
+		
+
+		
+		if (pass_comp){
 			const user = result.rows[0];
 
 			const token = jwt.sign({
@@ -40,9 +52,11 @@ adminRoute.post('/register', async(req,res) => {
 	const { username,password } = req.body;
 
 	try{
+		const hash_pass = await bcrypt.hash(password, saltRounds)
+
 		const result = await pool.query(
 			'INSERT INTO users(username,password) VALUES($1,$2)',
-			[username,password]
+			[username,hash_pass]
 		);
 		res.status(201).send('Employee registered successfully');
 	}
