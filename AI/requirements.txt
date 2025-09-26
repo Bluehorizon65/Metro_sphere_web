@@ -1,0 +1,28 @@
+# KMRL Document Analyzer API Requirements
+# =====================================
+
+# Core FastAPI components
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# PDF processing
+PyPDF2>=3.0.1
+
+# AI/ML components (install based on your setup)
+torch>=2.0.0
+transformers>=4.30.0
+peft>=0.4.0
+
+# Data validation
+pydantic>=2.0.0
+
+# Optional: for testing the API
+requests>=2.31.0
+
+# Optional: for CORS support (uncomment in server if needed)
+# python-multipart
+
+# Development/Testing (optional)
+# pytest>=7.0.0
+# httpx>=0.25.0
