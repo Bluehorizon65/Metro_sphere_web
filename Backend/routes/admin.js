@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { pool } = require("../db");
+//const { pool } = require("../db");
 
 const JWT_TOKEN = "s3cr37";
 const saltRounds = 10;

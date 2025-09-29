@@ -8,62 +8,7 @@ import axios from "axios";
 // PDF Uploader component
 import { useNavigate } from "react-router-dom";
 
-function PdfUploader() {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleFileChange = (e) => setFile(e.target.files[0]);
-
-  const handleUpload = async (file) => {
-    if (!file) {
-      setError("Please select a PDF file first.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/user/upload-pdf",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      if (response.data?.analysis) {
-        // Redirect automatically to PDF analysis page
-        navigate("/pdf-analysis", {
-          state: {
-            analysis: response.data.analysis,
-            actions: response.data.actions || [],
-          },
-        });
-      } else {
-        setError("Failed to analyze PDF.");
-      }
-    } catch (err) {
-      console.error("Upload error:", err.response?.data || err.message);
-      setError("Failed to analyze PDF.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="pdf-uploader">
-      <input type="file" accept="application/pdf" onChange={handleFileChange} />
-      <button onClick={() => handleUpload(file)} disabled={loading}>
-        {loading ? "Analyzing..." : "Upload & Analyze"}
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
-  );
-}
+// Removed PdfUploader. We'll use a single button for navigation.
 
 
 
@@ -201,8 +146,13 @@ function DashboardLayout() {
             <Zap size={28} style={{ marginBottom: 4, marginRight: 8 }} /> Quick Actions
           </div>
           <div className="quick-actions-btns">
-            {/* Replaced Upload button with actual PDF Uploader */}
-            <PdfUploader />
+            <button
+              className="quick-action-btn"
+              style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: 8, padding: '0.8rem 1.3rem', fontWeight: 600, fontSize: '1.08rem', cursor: 'pointer' }}
+              onClick={() => navigate('/upload-document')}
+            >
+              Upload & Analyze
+            </button>
           <button
             className="quick-action-btn"
             onClick={() => navigate("/semantic-search")}

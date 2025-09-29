@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors'); // <-- import cors
 
-const { pool } = require('./db');
+//const { pool } = require('./db');
 const { adminRoute } = require('./routes/admin');
 const { userRoute } = require('./routes/user');
 const { semanticRoute } = require('./routes/semantic');

@@ -1,5 +1,6 @@
 import LoginRegister from "./pages/LoginRegister";
 import DashboardLayout from "./pages/DashboardLayout";
+import UploadDocument from "./pages/UploadDocument";
 import PdfAnalysisPage from "./pages/PdfAnalysisPage"; // new page
 import BufferLoader from "./components/BufferLoader";
 import SemanticSearch from "./pages/SemanticSearch";
@@ -51,7 +52,7 @@ function AppRoutes() {
             <Route path="/dashboard" element={<DashboardLayout />} />
             <Route path="/pdf-analysis" element={<PdfAnalysisPage />} />
             <Route path="/semantic-search" element={<SemanticSearch />} />
-
+            <Route path="/upload-document" element={<UploadDocument />} />
           </Routes>
         </motion.div>
       )}

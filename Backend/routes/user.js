@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const { pool } = require('../db');
+//const { pool } = require('../db');
 const axios = require("axios");
 const multer = require("multer");
 const fs = require("fs");
@@ -69,23 +69,23 @@ userRoute.post("/upload-pdf", upload.single("file"), async (req, res) => {
     const result = response.data;
 
     // --- Save result + file path in Postgres ---
-    await pool.query(
-      `INSERT INTO documents 
-       (document_name, roles, conflict, department, task, priority, deadline, summary, status, file_path)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-      [
-        result.document_name || null,
-        result.roles || null,
-        result.conflict || null,
-        result.department || null,
-        result.task || null,
-        result.priority || null,
-        result.deadline || null,
-        result.summary || null,
-        result.status || null,
-        filePath
-      ]
-    );
+    //await pool.query(
+    //  `INSERT INTO documents 
+    //   (document_name, roles, conflict, department, task, priority, deadline, summary, status, file_path)
+    //   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+    //  [
+    //    result.document_name || null,
+    //    result.roles || null,
+    //    result.conflict || null,
+    //    result.department || null,
+    //    result.task || null,
+    //    result.priority || null,
+    //    result.deadline || null,
+    //    result.summary || null,
+    //    result.status || null,
+    //    filePath
+    //  ]
+    //);
 
     // --- Actions based on priority / department ---
     let actions = [];

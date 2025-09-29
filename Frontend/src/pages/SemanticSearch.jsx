@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Upload, Search as SearchIcon } from "lucide-react";
 import axios from "axios";
 
+
 function SemanticSearch() {
   const [file, setFile] = useState(null);
   const [query, setQuery] = useState("");
@@ -10,11 +11,12 @@ function SemanticSearch() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Dark background like second image
+  // Set a premium glassy background for this page only
   useEffect(() => {
-    document.body.style.backgroundColor = "#111827"; // Tailwind gray-900
+    document.body.style.background =
+      "linear-gradient(120deg, #232526 0%, #414345 100%) fixed";
     return () => {
-      document.body.style.backgroundColor = null;
+      document.body.style.background = null;
     };
   }, []);
 
@@ -66,72 +68,192 @@ function SemanticSearch() {
     }
   };
 
+  // Custom styles for premium look
+  const cardStyle = {
+    background: "rgba(30, 41, 59, 0.65)",
+    borderRadius: "1.5rem",
+    boxShadow: "0 8px 32px 0 rgba(31,38,135,0.18)",
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+    border: "1.5px solid rgba(255,255,255,0.18)",
+    padding: "2.2rem 2rem 2rem 2rem",
+    marginBottom: "2.2rem",
+    width: "100%",
+    maxWidth: 600,
+    color: "#f3f4f6",
+    position: "relative",
+  };
+  const inputStyle = {
+    background: "rgba(17,24,39,0.92)",
+    color: "#fff",
+    border: "none",
+    borderRadius: "0.9rem",
+    padding: "0.9rem 1.2rem",
+    fontSize: "1.08rem",
+    outline: "none",
+    width: "100%",
+    marginRight: 8,
+    boxShadow: "0 1px 6px 0 rgba(0,0,0,0.10)",
+  };
+  const buttonStyle = {
+    background: "linear-gradient(90deg, #2563eb 60%, #4f8cff 100%)",
+    color: "#fff",
+    border: "none",
+    borderRadius: "0.9rem",
+    padding: "0.9rem 2.1rem",
+    fontWeight: 700,
+    fontSize: "1.08rem",
+    cursor: loading ? "not-allowed" : "pointer",
+    boxShadow: "0 2px 8px 0 rgba(37,99,235,0.10)",
+    letterSpacing: "0.5px",
+    transition: "background 0.2s, box-shadow 0.2s",
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    minWidth: 120,
+    justifyContent: "center",
+  };
+  const uploadInputStyle = {
+    ...inputStyle,
+    padding: "0.7rem 1.2rem",
+    borderRadius: "0.7rem",
+    background: "rgba(255,255,255,0.10)",
+    color: "#fff",
+    width: 220,
+    marginRight: 16,
+    fontSize: "1.01rem",
+  };
+  const resultCardStyle = {
+    background: "rgba(17,24,39,0.92)",
+    color: "#e0e7ef",
+    borderRadius: "1.1rem",
+    padding: "1.1rem 1.3rem",
+    marginBottom: 12,
+    boxShadow: "0 2px 8px 0 rgba(31,38,135,0.10)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontSize: "1.08rem",
+    fontWeight: 500,
+    border: "1px solid rgba(255,255,255,0.10)",
+    transition: "background 0.18s, color 0.18s",
+  };
+  const highlightStyle = {
+    color: "#60a5fa",
+    fontWeight: 700,
+    fontSize: "1.13rem",
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center p-6 text-white">
-      <h1 className="text-3xl font-bold mb-8">📑 PDF Semantic Search</h1>
-
-      {/* Upload Section */}
-      <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Upload PDF</h2>
-        <div className="flex items-center gap-3">
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="file:bg-blue-600 file:text-white file:px-4 file:py-2 
-                       file:rounded-lg file:border-none hover:file:bg-blue-500 cursor-pointer text-sm"
-          />
-          <button
-            className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg shadow-md transition"
-            onClick={handleUpload}
-            disabled={loading}
-          >
-            <Upload size={20} />
-            {loading ? "Uploading..." : "Upload"}
-          </button>
+    <div
+      style={{
+        minHeight: "100vh",
+        minWidth: "100vw",
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "none",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 10,
+      }}
+    >
+      <div style={{ width: "100%", maxWidth: 700, display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
+        <div style={{ ...cardStyle, marginBottom: 0, marginTop: 0, textAlign: "center", width: "100%" }}>
+          <h1 style={{ fontSize: "2.3rem", fontWeight: 900, color: "#fff", letterSpacing: 1.5, marginBottom: 8, textShadow: "0 2px 8px rgba(0,0,0,0.10)" }}>
+            <span style={{ filter: "drop-shadow(0 0 8px #2563eb88)" }}>📑</span> PDF Semantic Search
+          </h1>
+          <p style={{ color: "#b3b3b3", fontWeight: 500, fontSize: "1.08rem", marginBottom: 0 }}>
+            Upload your PDF and search semantically with AI-powered precision.
+          </p>
         </div>
-      </div>
 
-      {/* Search Section */}
-      <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Search in Uploaded PDFs</h2>
-        <div className="flex w-full">
-          <input
-            type="text"
-            placeholder="🔍 Enter your query..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="flex-grow px-4 py-2 rounded-l-lg border-none bg-gray-900 text-white placeholder-gray-400 focus:outline-none"
-          />
-          <button
-            onClick={handleSearch}
-            className="px-4 py-2 bg-blue-600 rounded-r-lg hover:bg-blue-500 flex items-center justify-center transition"
-            disabled={loading}
-          >
-            <SearchIcon size={18} />
-          </button>
-        </div>
-      </div>
-
-      {/* Status Message */}
-      {message && (
-        <p className="text-red-400 mb-4 text-center font-medium">{message}</p>
-      )}
-
-      {/* Search Results */}
-      {results.length > 0 && (
-        <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col gap-4 overflow-y-auto max-h-96">
-          <h2 className="text-xl font-semibold mb-2">Results</h2>
-          {results.map((res, idx) => (
-            <div
-              key={idx}
-              className="bg-gray-900 text-gray-100 px-4 py-3 rounded-lg shadow hover:bg-gray-700 transition flex justify-between items-center"
+        {/* Upload Section */}
+        <div style={{ ...cardStyle, width: "100%" }}>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Upload PDF</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              style={uploadInputStyle}
+              accept="application/pdf"
+              disabled={loading}
+            />
+            <button
+              style={buttonStyle}
+              onClick={handleUpload}
+              disabled={loading}
             >
-              <span>📄 {res.file}</span>
-              <span className="font-semibold text-blue-400">{res.match}%</span>
-            </div>
-          ))}
+              <Upload size={20} />
+              {loading ? "Uploading..." : "Upload"}
+            </button>
+          </div>
         </div>
-      )}
+
+        {/* Search Section */}
+        <div style={{ ...cardStyle, width: "100%" }}>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Search in Uploaded PDFs</h2>
+          <div style={{ display: "flex", width: "100%", gap: 12 }}>
+            <input
+              type="text"
+              placeholder="🔍 Enter your query..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={inputStyle}
+              disabled={loading}
+            />
+            <button
+              onClick={handleSearch}
+              style={{ ...buttonStyle, minWidth: 56, padding: "0.9rem 1.2rem" }}
+              disabled={loading}
+              title="Search"
+            >
+              <SearchIcon size={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* Status Message */}
+        {message && (
+          <div style={{ ...cardStyle, color: "#f87171", fontWeight: 600, textAlign: "center", background: "rgba(30,41,59,0.85)", marginBottom: 0, marginTop: 0, padding: "1.1rem 1.2rem", width: "100%" }}>
+            {message}
+          </div>
+        )}
+
+        {/* Search Results */}
+        {results.length > 0 && (
+          <div
+            style={{
+              ...cardStyle,
+              maxHeight: 420,
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              marginBottom: 0,
+              width: "100%",
+            }}
+          >
+            <h2 style={{ fontSize: "1.18rem", fontWeight: 700, marginBottom: 10, color: "#fff" }}>Results</h2>
+            {results.map((res, idx) => (
+              <div
+                key={idx}
+                style={resultCardStyle}
+                className="semantic-result-card"
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: "1.25rem", marginRight: 6 }}>📄</span>
+                  <span style={{ fontWeight: 600 }}>{res.file}</span>
+                </span>
+                <span style={highlightStyle}>{res.match}%</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
