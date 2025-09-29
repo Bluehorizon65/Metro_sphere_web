@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Upload, Search as SearchIcon } from "lucide-react";
 import axios from "axios";
 
-
 function SemanticSearch() {
   const [file, setFile] = useState(null);
   const [query, setQuery] = useState("");
@@ -11,7 +10,7 @@ function SemanticSearch() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Set a premium glassy background for this page only
+  // Set premium glassy background
   useEffect(() => {
     document.body.style.background =
       "linear-gradient(120deg, #232526 0%, #414345 100%) fixed";
@@ -52,13 +51,21 @@ function SemanticSearch() {
     }
     setLoading(true);
     setMessage("");
+    setResults([]);
 
     try {
       const res = await axios.get("http://127.0.0.1:3000/semantic/search", {
         params: { query },
       });
-      setResults(res.data.results || []);
-      if ((res.data.results || []).length === 0) {
+
+      // Deduplicate results by file
+      const uniqueResults = Array.from(
+        new Map((res.data.results || []).map(item => [item.file, item])).values()
+      );
+
+      setResults(uniqueResults);
+
+      if (uniqueResults.length === 0) {
         setMessage("No results found.");
       }
     } catch (err) {
@@ -68,15 +75,15 @@ function SemanticSearch() {
     }
   };
 
-  // Custom styles for premium look
+  // Styles
   const cardStyle = {
-    background: "rgba(30, 41, 59, 0.65)",
+    background: "rgba(30,41,59,0.65)",
     borderRadius: "1.5rem",
     boxShadow: "0 8px 32px 0 rgba(31,38,135,0.18)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
     border: "1.5px solid rgba(255,255,255,0.18)",
-    padding: "2.2rem 2rem 2rem 2rem",
+    padding: "2.2rem",
     marginBottom: "2.2rem",
     width: "100%",
     maxWidth: 600,
@@ -136,6 +143,7 @@ function SemanticSearch() {
     fontSize: "1.08rem",
     fontWeight: 500,
     border: "1px solid rgba(255,255,255,0.10)",
+    cursor: "pointer",
     transition: "background 0.18s, color 0.18s",
   };
   const highlightStyle = {
@@ -162,6 +170,8 @@ function SemanticSearch() {
       }}
     >
       <div style={{ width: "100%", maxWidth: 700, display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
+
+        {/* Header */}
         <div style={{ ...cardStyle, marginBottom: 0, marginTop: 0, textAlign: "center", width: "100%" }}>
           <h1 style={{ fontSize: "2.3rem", fontWeight: 900, color: "#fff", letterSpacing: 1.5, marginBottom: 8, textShadow: "0 2px 8px rgba(0,0,0,0.10)" }}>
             <span style={{ filter: "drop-shadow(0 0 8px #2563eb88)" }}>📑</span> PDF Semantic Search
@@ -242,17 +252,18 @@ function SemanticSearch() {
               <div
                 key={idx}
                 style={resultCardStyle}
-                className="semantic-result-card"
+                onClick={() => window.open(`http://127.0.0.1:3000/semantic/files/${res.file}`, "_blank")}
               >
                 <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: "1.25rem", marginRight: 6 }}>📄</span>
                   <span style={{ fontWeight: 600 }}>{res.file}</span>
                 </span>
-                <span style={highlightStyle}>{res.match}%</span>
+                <span style={highlightStyle}>{res.match.toFixed(2)}%</span>
               </div>
             ))}
           </div>
         )}
+
       </div>
     </div>
   );
