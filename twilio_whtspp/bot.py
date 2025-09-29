@@ -32,7 +32,7 @@ def whatsapp_reply():
         else:
             msg.body("Please send me a document 📑")
 
-        return Response(str(resp), mimetype="application/xml")
+        return Response(str(resp), mimetype="application/pdf")
 
     except Exception as e:
         print("❌ ERROR:", str(e))
