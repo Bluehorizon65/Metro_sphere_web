@@ -153,6 +153,7 @@ Here is an example of the required format:
   "summary":"A concise summary of the document content."
 }}
 
+If any content is missing or not applicable, use "N/A" for strings and an empty list for arrays. Do not include any keys with null or empty values in the final JSON.
 Now, analyze the following document:
 
 Document Content:

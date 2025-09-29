@@ -18,9 +18,9 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 app = FastAPI(title="Translation Pipeline API")
 
 
-# ----------------------------
+
 # Utility Functions
-# ----------------------------
+
 def clean_text(text: str) -> str:
     text = re.sub(r"\s+", " ", text)
     return text.strip()
@@ -61,9 +61,9 @@ def split_audio(audio_path, chunk_length=30, output_folder="chunks"):
     return chunks
 
 
-# ----------------------------
+
 # Handlers
-# ----------------------------
+
 def process_text_file(filepath: str):
     with open(filepath, "r", encoding="utf-8") as f:
         text = f.read()
@@ -112,9 +112,9 @@ def process_audio_file(filepath: str, model_name="vrclc/Whisper-small-Malayalam"
     return translate_text(full_text, source="ml", target="en")
 
 
-# ----------------------------
+
 # API Endpoints
-# ----------------------------
+
 @app.post("/translate/")
 async def translate_file(file: UploadFile = File(...)):
     ext = file.filename.lower().split(".")[-1]

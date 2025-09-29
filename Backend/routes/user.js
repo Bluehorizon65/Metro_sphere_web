@@ -108,42 +108,65 @@ userRoute.post("/upload-pdf", upload.single("file"), async (req, res) => {
 // ----------------------
 // Analyze raw text -> FastAPI
 // ----------------------
-userRoute.post("/analyze-text", async (req, res) => {
+
+
+userRoute.post("/analyze-text", upload.single("file"), async (req, res) => {
   try {
-    const { text, document_name } = req.body;
-    if (!text) return res.status(400).json({ error: "Text is required" });
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-    const response = await axios.post("http://localhost:8000/analyze/text", {
-      text,
-      document_name
-    });
+    console.log("Uploaded file:", req.file.originalname);
 
-    const result = response.data;
+    // Prepare FormData
+    const form = new FormData();
+    form.append("file", fs.createReadStream(req.file.path), req.file.originalname);
 
-    // --- Save in DB ---
-    await pool.query(
-      `INSERT INTO documents 
-       (document_name, roles, conflict, department, task, priority, deadline, summary, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-      [
-        result.document_name || null,
-        result.roles || null,
-        result.conflict || null,
-        result.department || null,
-        result.task || null,
-        result.priority || null,
-        result.deadline || null,
-        result.summary || null,
-        result.status || null
-      ]
+    // Call translate API
+    const translateResponse = await axios.post(
+      "http://127.0.0.1:8000/translate/",
+      form,
+      { headers: form.getHeaders() }
     );
 
+    const { filename, translation } = translateResponse.data;
+    console.log("Translation received:", translation);
+
+    if (!translation) return res.status(400).json({ error: "Translation failed" });
+
+  
+
+    // Call analyze API
+    console.log("Calling analyze API with:", {
+      url: "http://localhost:8000/analyze/text",
+      payload: { text: translation, document_name: filename }
+    });
+    
+    const analyzeResponse = await axios.post("http://localhost:8000/analyze/text", {
+      text: translation,
+      document_name: filename
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const result = analyzeResponse.data;
+    console.log("Analysis result:", result);
+
+    // Delete temp file
+    fs.unlink(req.file.path, (err) => {
+      if (err) console.warn("Failed to delete temp file:", err);
+    });
+
+    // Return result
     res.json(result);
 
   } catch (err) {
-    console.error("Error analyzing text:", err.message);
+    console.error("Error in /analyze-text:", err.response?.data || err.message);
     res.status(500).json({ error: "Failed to analyze text" });
   }
 });
+
+
+
 
 module.exports = { userRoute };

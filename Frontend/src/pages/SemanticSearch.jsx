@@ -10,12 +10,13 @@ function SemanticSearch() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Set premium glassy background
+  // Set metro background image (same as login page)
   useEffect(() => {
-    document.body.style.background =
-      "linear-gradient(120deg, #232526 0%, #414345 100%) fixed";
+    document.body.style.background = "url('./src/assets/metro-bg.jpg') no-repeat center center fixed";
+    document.body.style.backgroundSize = "cover";
     return () => {
       document.body.style.background = null;
+      document.body.style.backgroundSize = null;
     };
   }, []);
 
