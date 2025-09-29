@@ -2,7 +2,7 @@ import os
 import requests
 
 FOLDER = "test_files"
-URL = "http://127.0.0.1:8000/translate/"
+URL = "http://127.0.0.1:8002/translate/"
 
 def send_file(filepath):
     with open(filepath, "rb") as f:
