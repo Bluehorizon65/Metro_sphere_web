@@ -4,7 +4,8 @@ import UploadDocument from "./pages/UploadDocument";
 import PdfAnalysisPage from "./pages/PdfAnalysisPage";
 import BufferLoader from "./components/BufferLoader";
 import SemanticSearch from "./pages/SemanticSearch";
-import EmailUploads from "./pages/EmailUploads"; // new page
+import EmailUploads from "./pages/EmailUploads";
+import WhatsappUploads from "./pages/WhatsappUploads";
 
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -55,6 +56,7 @@ function AppRoutes() {
             <Route path="/semantic-search" element={<SemanticSearch />} />
             <Route path="/upload-document" element={<UploadDocument />} />
             <Route path="/email-uploads" element={<EmailUploads />} />
+            <Route path="/whatsapp-uploads" element={<WhatsappUploads />} />
           </Routes>
         </motion.div>
       )}
