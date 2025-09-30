@@ -97,7 +97,7 @@ class GmailAttachmentForwarder:
 def main():
     EMAIL = "casecraftstudio20@gmail.com"
     APP_PASSWORD = "xkus onya bygn nokc"  # create from Google App Passwords
-    BACKEND_API = "http://127.0.0.1:8001/upload"  # your backend
+    BACKEND_API = "http://127.0.0.1:8004/upload"  # your backend
 
     forwarder = GmailAttachmentForwarder(backend_api=BACKEND_API)
     forwarder.start_monitoring(email_address=EMAIL, password=APP_PASSWORD, interval=30)

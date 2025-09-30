@@ -1,7 +1,7 @@
 // /src/pages/DashboardLayout.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Bell, LayoutDashboard, FileText, CheckSquare, Building2, Users, Settings, Clock, FileCheck2, Sparkles, FolderKanban, Zap, AlertCircle, CalendarCheck2, Search, Upload, FileBarChart2 } from "lucide-react";
+import { User, Bell, LayoutDashboard, FileText, CheckSquare, Building2, Users, Settings, Clock, FileCheck2, Sparkles, FolderKanban, Zap, AlertCircle, CalendarCheck2, Search, Upload, FileBarChart2, Mail } from "lucide-react";
 import axios from "axios";
 
 
@@ -334,6 +334,32 @@ function DashboardLayout() {
               }}
             >
               <Search size={18} /> Search Semantics
+            </button>
+            <button 
+              className="quick-action-btn"
+              style={{
+                background: 'rgba(41, 55, 75, 0.8)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                borderRadius: '12px',
+                color: '#f1f5f9',
+                fontWeight: '600',
+                transition: 'all 0.3s ease'
+              }}
+              onClick={() => navigate('/email-uploads')}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(37, 99, 235, 0.8)';
+                e.target.style.color = '#ffffff';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(41, 55, 75, 0.8)';
+                e.target.style.color = '#f1f5f9';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <Mail size={18} /> Email Uploads
             </button>
             <button 
               className="quick-action-btn"

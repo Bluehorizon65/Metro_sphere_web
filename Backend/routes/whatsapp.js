@@ -12,9 +12,9 @@ const upload = multer({ dest: "uploads/" });
 
 
 // ------------------ Translate & Analyze (auto-pick file) ------------------
-router.post("/whatsapp-analyze", async (req, res) => {
+router.get("/whatsapp-analyze", async (req, res) => {
   try {
-    const uploadDir = "C:\\Users\\Enemb\\OneDrive\\Documents\\SIH_Bravo-6-Web-\\twilio\\twilio_whtspp\\received_files";
+    const uploadDir = "C:\\Users\\Akhil\\Projects\\SIH\\SIH_Bravo-6-Web-\\twilio\\twilio_whtspp\\received_files";
 
     // Get all files in uploads folder
     const files = fs.readdirSync(uploadDir).filter(f => f.endsWith(".pdf"));
@@ -61,8 +61,6 @@ router.post("/whatsapp-analyze", async (req, res) => {
 
     // --- Return combined result ---
     res.json({
-      filename,
-      translation,
       analysis: analyzeResponse.data
     });
 

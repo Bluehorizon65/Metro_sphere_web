@@ -12,9 +12,9 @@ const upload = multer({ dest: "uploads/" });
 
 
 // ------------------ Translate & Analyze (auto-pick file) ------------------
-router.post("/email", async (req, res) => {
+router.get("/email", async (req, res) => {
   try {
-    const uploadDir = "C:\\Users\\Enemb\\OneDrive\\Documents\\SIH_Bravo-6-Web-\\twilio\\twilio_gmail\\attachments";
+    const uploadDir = "C:\\Users\\Akhil\\Projects\\SIH\\SIH_Bravo-6-Web-\\twilio\\twilio_gmail\\attachments";
 
     // Get all files in uploads folder
     const files = fs.readdirSync(uploadDir).filter(f => f.endsWith(".pdf"));
@@ -61,8 +61,6 @@ router.post("/email", async (req, res) => {
 
     // --- Return combined result ---
     res.json({
-      filename,
-      translation,
       analysis: analyzeResponse.data
     });
 
