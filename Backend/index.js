@@ -5,6 +5,10 @@ const cors = require('cors'); // <-- import cors
 const { adminRoute } = require('./routes/admin');
 const { userRoute } = require('./routes/user');
 const { semanticRoute } = require('./routes/semantic');
+const { emailRoute } = require('./routes/email');
+
+
+
 
 const app = express();
 
@@ -20,6 +24,8 @@ app.use(express.json());
 app.use("/user", userRoute);
 app.use("/admin", adminRoute);
 app.use("/semantic", semanticRoute);
+app.use("/email", emailRoute);
+
 
 app.listen(3000, () => {
   console.log('Server running at http://localhost:3000');
