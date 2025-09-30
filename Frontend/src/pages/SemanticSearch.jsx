@@ -1,10 +1,9 @@
-// /src/pages/SemanticSearch.jsx
 import { useState, useEffect } from "react";
-import { Upload, Search as SearchIcon } from "lucide-react";
+import { Upload, Search as SearchIcon, X } from "lucide-react";
 import axios from "axios";
 
 function SemanticSearch() {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]); // Changed from single file to array
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,24 +19,34 @@ function SemanticSearch() {
     };
   }, []);
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(prevFiles => [...prevFiles, ...selectedFiles]);
+  };
+
+  const removeFile = (indexToRemove) => {
+    setFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToRemove));
+  };
 
   const handleUpload = async () => {
-    if (!file) {
-      setMessage("Please select a file first.");
+    if (files.length === 0) {
+      setMessage("Please select at least one file first.");
       return;
     }
     setLoading(true);
     setMessage("");
 
     const formData = new FormData();
-    formData.append("file", file);
+    files.forEach((file, index) => {
+      formData.append(`files`, file); // Use 'files' for multiple files
+    });
 
     try {
       const res = await axios.post("http://127.0.0.1:3000/semantic/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setMessage(res.data.message || "Upload successful");
+      setFiles([]); // Clear files after successful upload
     } catch (err) {
       setMessage(err.response?.data?.message || "Upload failed.");
     } finally {
@@ -76,7 +85,7 @@ function SemanticSearch() {
     }
   };
 
-  // Styles
+  // ...existing styles...
   const cardStyle = {
     background: "rgba(30,41,59,0.65)",
     borderRadius: "1.5rem",
@@ -152,6 +161,32 @@ function SemanticSearch() {
     fontWeight: 700,
     fontSize: "1.13rem",
   };
+  const fileItemStyle = {
+    background: "rgba(17,24,39,0.70)",
+    borderRadius: "0.8rem",
+    padding: "0.8rem 1rem",
+    marginBottom: "0.5rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontSize: "0.95rem",
+    color: "#e0e7ef",
+    border: "1px solid rgba(255,255,255,0.08)",
+  };
+  const removeButtonStyle = {
+    background: "rgba(239,68,68,0.8)",
+    border: "none",
+    borderRadius: "50%",
+    width: "24px",
+    height: "24px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    color: "#fff",
+    fontSize: "12px",
+    transition: "background 0.2s",
+  };
 
   return (
     <div
@@ -175,38 +210,68 @@ function SemanticSearch() {
         {/* Header */}
         <div style={{ ...cardStyle, marginBottom: 0, marginTop: 0, textAlign: "center", width: "100%" }}>
           <h1 style={{ fontSize: "2.3rem", fontWeight: 900, color: "#fff", letterSpacing: 1.5, marginBottom: 8, textShadow: "0 2px 8px rgba(0,0,0,0.10)" }}>
-            <span style={{ filter: "drop-shadow(0 0 8px #2563eb88)" }}>📑</span> PDF Semantic Search
+            <span style={{ filter: "drop-shadow(0 0 8px #2563eb88)" }}>📑</span> Document Semantic Search
           </h1>
           <p style={{ color: "#b3b3b3", fontWeight: 500, fontSize: "1.08rem", marginBottom: 0 }}>
-            Upload your PDF and search semantically with AI-powered precision.
+            Upload multiple documents and search semantically with AI-powered precision.
           </p>
         </div>
 
         {/* Upload Section */}
         <div style={{ ...cardStyle, width: "100%" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Upload PDF</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Upload Documents</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: files.length > 0 ? 20 : 0 }}>
             <input
               type="file"
               onChange={handleFileChange}
               style={uploadInputStyle}
-              accept="application/pdf"
+              multiple
               disabled={loading}
             />
             <button
               style={buttonStyle}
               onClick={handleUpload}
-              disabled={loading}
+              disabled={loading || files.length === 0}
             >
               <Upload size={20} />
-              {loading ? "Uploading..." : "Upload"}
+              {loading ? "Uploading..." : `Upload ${files.length > 0 ? `(${files.length})` : ""}`}
             </button>
           </div>
+          
+          {/* Selected Files List */}
+          {files.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: 12, color: "#d1d5db" }}>
+                Selected Files ({files.length})
+              </h3>
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {files.map((file, index) => (
+                  <div key={index} style={fileItemStyle}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span>📄</span>
+                      <span>{file.name}</span>
+                      <span style={{ color: "#9ca3af", fontSize: "0.85rem" }}>
+                        ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
+                    </span>
+                    <button
+                      style={removeButtonStyle}
+                      onClick={() => removeFile(index)}
+                      disabled={loading}
+                      title="Remove file"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Search Section */}
         <div style={{ ...cardStyle, width: "100%" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Search in Uploaded PDFs</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: 18, color: "#fff" }}>Search in Uploaded Documents</h2>
           <div style={{ display: "flex", width: "100%", gap: 12 }}>
             <input
               type="text"
