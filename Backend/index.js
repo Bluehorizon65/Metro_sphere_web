@@ -6,7 +6,7 @@ const { adminRoute } = require('./routes/admin');
 const { userRoute } = require('./routes/user');
 const { semanticRoute } = require('./routes/semantic');
 const { emailRoute } = require('./routes/email');
-
+const { whatsappRoute } = require('./routes/whatsapp');
 
 
 
@@ -25,6 +25,7 @@ app.use("/user", userRoute);
 app.use("/admin", adminRoute);
 app.use("/semantic", semanticRoute);
 app.use("/email", emailRoute);
+app.use("/whatsapp", whatsappRoute);
 
 
 app.listen(3000, () => {
