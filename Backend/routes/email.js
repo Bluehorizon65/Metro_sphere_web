@@ -14,7 +14,7 @@ const upload = multer({ dest: "uploads/" });
 // ------------------ Translate & Analyze (auto-pick file) ------------------
 router.get("/email", async (req, res) => {
   try {
-    const uploadDir = "C:\\Users\\Akhil\\Projects\\SIH\\SIH_Bravo-6-Web-\\twilio\\twilio_gmail\\attachments";
+    const uploadDir = "../twilio/twilio_gmail/attachments";
 
     // Get all files in uploads folder
     const files = fs.readdirSync(uploadDir).filter(f => f.endsWith(".pdf"));

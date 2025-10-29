@@ -42,7 +42,28 @@ cd Semantic-search
 
 pip install -r requirements.txt
 
-
-python semantic_search_api.py
+ uvicorn merged_api:app --port 8001
 ```
 
+## twilio gmail :-
+
+```
+cd twilio/twilio_gmail
+
+python backend.py
+```
+
+## twilio whatsapp :-
+
+```
+cd twilio/twilio_whtspp
+
+uvicorn backend:app --port 8003 --reload
+```
+pipeline :-
+
+```
+cd pipeline
+
+uvicorn full_pipeline:app --port 8002 --reload
+```

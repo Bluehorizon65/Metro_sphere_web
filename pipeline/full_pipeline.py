@@ -127,7 +127,7 @@ async def translate_file(file: UploadFile = File(...)):
         if ext == "txt":
             result = process_text_file(tmp_path)
         elif ext == "pdf":
-            result = process_pdf_file(tmp_path, poppler_path=r"C:\Users\Akhil\Downloads\Release-23.11.0-0\poppler-23.11.0\Library\bin")
+            result = process_pdf_file(tmp_path, poppler_path=r"C:\\Program Files\\poppler-25.07.0\\Library\\bin")
         elif ext in ["png", "jpg", "jpeg"]:
             result = process_image_file(tmp_path)
         elif ext in ["mp3", "wav"]:
