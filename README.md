@@ -1,4 +1,14 @@
-# SIH_Bravo-6-Web-
+# Metro Sphere
+Metro Sphere is an AI-powered app/website that centralizes all metro documents into one organized hub, enabling employees to instantly find what they need.
+
+❖ Our system acts as a single-point platform, automatically ingesting and digitizing every document (PDF, images, audio).
+
+❖ A fine-tuned Llama 3 model reads every document to extract summaries and key details like priority, deadline, task, and suggestions.
+
+❖Our system maintains the documents for knowledge management, along with document retrieval, featuring an easy search engine and document tracking.
+
+❖The AI model understands a document's context and suggests when it should be shared with other teams.
+
 SIH 2025 WEB
 
 
