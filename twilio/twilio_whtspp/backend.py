@@ -10,8 +10,8 @@ UPLOAD_DIR = "received_files"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Put your Twilio credentials here
-ACCOUNT_SID = "AC5a4c7d3f4121472998c8c51c1adc20b3"
-AUTH_TOKEN = "5115719c9021a95b21cfe8c1bfa2ad02"
+ACCOUNT_SID = ""
+AUTH_TOKEN = ""
 
 @app.post("/upload")
 async def upload_file(payload: dict = Body(...)):
